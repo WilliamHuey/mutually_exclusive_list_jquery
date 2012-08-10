@@ -5,17 +5,20 @@ Usage:
 -------------
 Include the file jquery-1.7.2.js and mutually_exclusive_select_lists.js in the header of your html file:
 
+```bash
 <head>
 	<script type="text/javascript" src="jquery-1.7.2.js"></script>
 	<script type="text/javascript" src="mutually_exclusive.js"></script>
 </head>
-
+```
 
 In your script tag:
 
+```bash
 <script>
 	$('select.class_name_for_your_select_list').onlyBeOne();
 </script>
+```
 
 Description: 
 -------------
