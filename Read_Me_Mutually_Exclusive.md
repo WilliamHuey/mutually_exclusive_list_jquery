@@ -1,5 +1,5 @@
-Mutually Exclusive Select Lists
-===============================
+Mutually Exclusive Select Lists  - Jquery
+=========================================
 
 Usage:
 -------------
