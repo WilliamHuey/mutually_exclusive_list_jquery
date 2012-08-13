@@ -154,7 +154,7 @@
 				}
 			}
 		}
-		//keep a record of entries before any changes before changes to the lists
+		//keep a record of entries before any new changes to the lists
 		function getEntries() {
 			var listSelectedEntries = [];
 			for (var i = 0; i < $(tagWithClass).length; i++) {
