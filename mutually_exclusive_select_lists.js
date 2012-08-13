@@ -204,5 +204,6 @@
 			}
 			reselectEntries(entriesFromListsOld, entriesFromLists, positionOfList);
 		});
+		return $(this);
 	};
 })(jQuery);
