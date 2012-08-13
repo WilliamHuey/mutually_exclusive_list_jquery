@@ -16,7 +16,9 @@ In your script tag:
 
 ```bash
 <script>
-	$('select.class_name_for_your_select_list').onlyBeOne();
+	$(document).ready(function () {
+		$('select.mutually_exclusive_select_lists').onlyBeOne();
+	})
 </script>
 ```
 
