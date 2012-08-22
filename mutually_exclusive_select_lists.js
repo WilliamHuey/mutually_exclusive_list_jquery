@@ -10,7 +10,7 @@
 		var countSelects = this.length;
 		//determine the length of the select list 
 		var allEntriesLength = $(tagWithClass).first().find('option').length;
-		//indexing the original text and values from all the select lists					
+		//indexing the original text and values from all the select lists                    
 		var onListNumber;
 		var listValues = [];
 		var listText = [];
@@ -24,7 +24,7 @@
 		for (var i = 0; i < countSelects * allEntriesLength; i++) {
 			var optionEntry = $(tagWithClass + ' option:eq(' + i + ')');
 			var listItemVal = "";
-			//determine if the value attribute is present on entries													
+			//determine if the value attribute is present on entries                                                    
 			if (!$(tagWithClass + ' option:eq(' + i + ')').is('[value]')) {
 				listItemVal = "";
 			} else {
@@ -84,11 +84,11 @@
 		}
 		//appending the entry into siblings
 		function addOptionsForSiblings(previouslySelected, positionOfList) {
-			//determine the siblings list position; valid					
+			//determine the siblings list position                   
 			for (var i = 1; i < countSelects + 1; i++) {
 				//only going for the siblings
 				if (positionOfList !== i) {
-					//getting a select list; eq() uses a zero index, have to subtract									
+					//getting a select list; eq() uses a zero index, have to subtract                                    
 					$(tagWithClass).eq(i - 1).each(function () {
 						//sibling list; contains options
 						$siblingList = $(this);
@@ -103,39 +103,34 @@
 							//use text to get the index
 							var siblingEntryText = $.trim($(this).text());
 							var siblingEntryIndex = listsInformation[i - 1][2].indexOf(siblingEntryText);
-							//adding entries back with values
-							function determineValueAndInsert(positionEntry) {
-								var siblingValueRestoreEntry = listsInformation[i - 1][3][siblingEntryIndex + positionEntry];
-								//determine values
+							function determineValue(siblingValueRestoreEntry) {
 								if (siblingValueRestoreEntry == "") {
 									var appendPrefix = '<option>';
 								} else {
 									appendPrefix = '<option value=' + siblingValueRestoreEntry + '>';
 								}
-								//inserting entry back
-								if (positionEntry == -1) {
-									$(this).before(appendPrefix + previouslySelected + '</option>');
-								} else {
-									$(this).after(appendPrefix + previouslySelected + '</option>');
-								}
+								return appendPrefix;
 							}
 							//insert in the beginning of list
 							if ($siblingsOptions.eq(1).text() == siblingEntryText && positionOfPreviousText < siblingEntryIndex) {
-								var beginAndMiddleEntry = -1;
-								determineValueAndInsert(beginAndMiddleEntry);
+								var siblingValueRestoreEntry = listsInformation[i - 1][3][siblingEntryIndex - 1];
+								var appendPrefix = determineValue(siblingValueRestoreEntry);
+								$(this).before(appendPrefix + previouslySelected + '</option>');
 							}
 							//insert in the middle of list
 							if ($siblingsOptions.eq(entryCounter).text() !== "" && entryCounter - 1 > 0) {
 								var previousEntryIndex = listsInformation[i - 1][2].indexOf($siblingsOptions.eq(entryCounter - 1).text());
 								if (previousEntryIndex < positionOfPreviousText && positionOfPreviousText < siblingEntryIndex) {
-									var beginAndMiddleEntry = -1;
-									determineValueAndInsert(beginAndMiddleEntry);
+									var siblingValueRestoreEntry = listsInformation[i - 1][3][siblingEntryIndex - 1];
+									var appendPrefix = determineValue(siblingValueRestoreEntry);
+									$(this).before(appendPrefix + previouslySelected + '</option>');
 								}
 							}
 							//insert in the end of list
 							if ($siblingsOptions.eq($siblingsOptions.length - 1).text() == siblingEntryText && siblingEntryIndex < positionOfPreviousText) {
-								var endEntry = 1;
-								determineValueAndInsert(endEntry);
+								var siblingValueRestoreEntry = listsInformation[i - 1][3][siblingEntryIndex + 1];
+								var appendPrefix = determineValue(siblingValueRestoreEntry);
+								$(this).after(appendPrefix + previouslySelected + '</option>');
 							}
 						});
 					});
@@ -154,7 +149,7 @@
 				}
 			}
 		}
-		//keep a record of entries before any new changes to the lists
+		//keep a record of entries before any changes before changes to the lists
 		function getEntries() {
 			var listSelectedEntries = [];
 			for (var i = 0; i < $(tagWithClass).length; i++) {
@@ -163,7 +158,7 @@
 			return listSelectedEntries;
 		}
 		var entriesFromLists = getEntries();
-		//assuming the select list all have a blank entry		
+		//assuming the select list all have a blank entry        
 		$(tagWithClass).change(function () {
 			var entriesFromListsOld = entriesFromLists;
 			//siblings of focused list
@@ -196,7 +191,7 @@
 				//have to add option back to siblings if a non-blank value was selected from the same list
 				if (previouslySelected.length !== 0) {
 					addOptionsForSiblings(previouslySelected, positionOfList);
-				}
+				}                    
 			}
 			//selecting blank entry means siblings will receive the options that was unselected in the previously focused list
 			else {
