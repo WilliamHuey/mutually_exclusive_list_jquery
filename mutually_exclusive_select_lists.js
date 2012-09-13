@@ -52,6 +52,7 @@
 		for (var i = 0; i < listsInformation.length; i++) {
 			listsInformation[i].splice(1, 0, indexCountEntries);
 		}
+
 		function determineListPosition(textOfSelectedOptionFocusedList) {
 			var listPosition = 0;
 			for (var i = 0; i < $(tagWithClass).length; i++) {
@@ -62,6 +63,7 @@
 			}
 			return listPosition;
 		}
+
 		function determineEntryIndexPosition(textOfSelectedOptionFocusedList, positionOfList) {
 			for (var i = 0; i < listsInformation.length; i++) {
 				for (var j = 0; j < listsInformation[i][2].length; j++) {
@@ -72,6 +74,7 @@
 			}
 			return indexofSelectedEntry;
 		}
+
 		function removeOptionsFromSiblings(sibling, textOfSelectedOptionFocusedList) {
 			var optionsOfCurrentSibling = sibling.find('option');
 			//finding a match in sibling and deleting it 
@@ -84,6 +87,39 @@
 		}
 		//appending the entry into siblings
 		function addOptionsForSiblings(previouslySelected, positionOfList) {
+			//polyfill for indexOf; for browsers that don't support indexOf
+			if (!Array.prototype.indexOf) {
+				Array.prototype.indexOf = function (searchElement /*, fromIndex */ ) {
+					"use strict";
+					if (this == null) {
+						throw new TypeError();
+					}
+					var t = Object(this);
+					var len = t.length >>> 0;
+					if (len === 0) {
+						return -1;
+					}
+					var n = 0;
+					if (arguments.length > 1) {
+						n = Number(arguments[1]);
+						if (n != n) { // shortcut for verifying if it's NaN
+							n = 0;
+						} else if (n != 0 && n != Infinity && n != -Infinity) {
+							n = (n > 0 || -1) * Math.floor(Math.abs(n));
+						}
+					}
+					if (n >= len) {
+						return -1;
+					}
+					var k = n >= 0 ? n : Math.max(len - Math.abs(n), 0);
+					for (; k < len; k++) {
+						if (k in t && t[k] === searchElement) {
+							return k;
+						}
+					}
+					return -1;
+				}
+			}
 			//determine the siblings list position                   
 			for (var i = 1; i < countSelects + 1; i++) {
 				//only going for the siblings
@@ -103,6 +139,7 @@
 							//use text to get the index
 							var siblingEntryText = $.trim($(this).text());
 							var siblingEntryIndex = listsInformation[i - 1][2].indexOf(siblingEntryText);
+
 							function determineValue(siblingValueRestoreEntry) {
 								if (siblingValueRestoreEntry == "") {
 									var appendPrefix = '<option>';
@@ -191,7 +228,7 @@
 				//have to add option back to siblings if a non-blank value was selected from the same list
 				if (previouslySelected.length !== 0) {
 					addOptionsForSiblings(previouslySelected, positionOfList);
-				}                    
+				}
 			}
 			//selecting blank entry means siblings will receive the options that was unselected in the previously focused list
 			else {
